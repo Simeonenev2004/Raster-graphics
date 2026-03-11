@@ -24,15 +24,38 @@ public class MainApp {
 
             switch (command) {
                 case "load":
+
                     if (parts.length < 2) {
                         System.out.println("Usage: load <filename>");
                         break;
                     }
+
                     session = new Session(sessionId++);
+
                     ImageFile img = FileHandler.load(parts[1]);
+
                     session.addImage(img);
+
                     System.out.println("Session with ID: " + session.getSessionId() + " started");
-                    session.listImages();
+                    break;
+
+                case "grayscale":
+                    if(session == null) {
+                        System.out.println("No active session.");
+                        break;
+                    }
+                    session.addTransformation("grayscale");
+                    System.out.println("Transformation grayscale added.");
+                    break;
+
+                case "session":
+                    if(session == null) {
+                        System.out.println("No active session.");
+                        break;
+                    }
+                    if(parts.length > 1 && parts[1].equals("info")) {
+                        session.printSessionInfo();
+                    }
                     break;
 
                 case "add":

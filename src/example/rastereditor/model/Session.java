@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Session {
+
     private int sessionId;
     private List<ImageFile> images = new ArrayList<>();
+    private List<String> transformations = new ArrayList<>();
 
     public Session(int sessionId) {
         this.sessionId = sessionId;
@@ -23,14 +25,30 @@ public class Session {
         images.add(img);
     }
 
-    public void listImages() {
-        if (images.isEmpty()) {
-            System.out.println("No images in this session.");
+    public void addTransformation(String transformation) {
+        transformations.add(transformation);
+    }
+
+    public List<String> getTransformations() {
+        return transformations;
+    }
+
+    public void printSessionInfo() {
+
+        System.out.print("Name of images in the session: ");
+
+        for (ImageFile img : images) {
+            System.out.print(img.getFilename() + " ");
+        }
+
+        System.out.println();
+
+        if (transformations.isEmpty()) {
+            System.out.println("Pending transformations: none");
         } else {
-            System.out.print("Images: ");
-            for (int i=0; i<images.size(); i++) {
-                ImageFile img = images.get(i);
-                System.out.println(img.getFilename());
+            System.out.print("Pending transformations: ");
+            for (String t : transformations) {
+                System.out.print(t + " ");
             }
             System.out.println();
         }
