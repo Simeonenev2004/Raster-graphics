@@ -1,2 +1,2 @@
 # Raster-graphics
-OOP project - raster graphics processing
+OOP project - raster graphics editor
