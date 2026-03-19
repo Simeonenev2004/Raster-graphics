@@ -5,15 +5,28 @@ import example.rastereditor.model.ImageFile;
 public class FileHandler {
 
     public static ImageFile load(String filename) {
-        System.out.println("Successfully loaded " + filename);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Successfully loaded ").append(filename);
+
+        System.out.println(sb);
+
         return new ImageFile(filename);
     }
 
     public static void save(ImageFile img) {
-        System.out.println("Saved " + img.getFilename());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Saved ").append(img.getFilename());
+
+        System.out.println(sb);
     }
 
     public static void saveAs(ImageFile img, String newName) {
-        System.out.println("Saved as " + newName);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Saved as ").append(newName);
+
+        System.out.println(sb);
     }
 }

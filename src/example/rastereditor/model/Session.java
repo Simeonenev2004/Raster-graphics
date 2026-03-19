@@ -1,5 +1,7 @@
 package example.rastereditor.model;
 
+import example.rastereditor.transformations.Transformation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public class Session {
 
     private int sessionId;
     private List<ImageFile> images = new ArrayList<>();
-    private List<String> transformations = new ArrayList<>();
+    private List<Transformation> transformations = new ArrayList<>();
 
     public Session(int sessionId) {
         this.sessionId = sessionId;
@@ -25,32 +27,30 @@ public class Session {
         images.add(img);
     }
 
-    public void addTransformation(String transformation) {
-        transformations.add(transformation);
-    }
-
-    public List<String> getTransformations() {
-        return transformations;
+    public void addTransformation(Transformation t) {
+        transformations.add(t);
     }
 
     public void printSessionInfo() {
 
-        System.out.print("Name of images in the session: ");
+        StringBuilder sb = new StringBuilder();
 
+        sb.append("Name of images in the session: ");
         for (ImageFile img : images) {
-            System.out.print(img.getFilename() + " ");
+            sb.append(img.getFilename()).append(" ");
         }
 
-        System.out.println();
+        sb.append("\n");
 
         if (transformations.isEmpty()) {
-            System.out.println("Pending transformations: none");
+            sb.append("Pending transformations: none");
         } else {
-            System.out.print("Pending transformations: ");
-            for (String t : transformations) {
-                System.out.print(t + " ");
+            sb.append("Pending transformations: ");
+            for (Transformation t : transformations) {
+                sb.append(t.getName()).append(" ");
             }
-            System.out.println();
         }
+
+        System.out.println(sb);
     }
 }

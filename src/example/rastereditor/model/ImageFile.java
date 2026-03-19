@@ -1,6 +1,7 @@
 package example.rastereditor.model;
 
 public class ImageFile {
+
     private String filename;
 
     public ImageFile(String filename) {

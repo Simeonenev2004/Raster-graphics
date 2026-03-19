@@ -1,115 +1,103 @@
 package example.rastereditor.app;
 
-
 import example.rastereditor.model.Session;
 import example.rastereditor.model.ImageFile;
 import example.rastereditor.file.FileHandler;
+import example.rastereditor.transformations.Grayscale;
 
 import java.util.Scanner;
 
 public class MainApp {
 
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
         Session session = null;
         int sessionId = 1;
 
-        System.out.println("Welcome to Simple Raster Editor!");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Welcome to Simple Raster Editor!");
+        System.out.println(sb);
 
         while (true) {
+
             System.out.print("> ");
+
             String input = sc.nextLine().trim();
             String[] parts = input.split(" ");
             String command = parts[0].toLowerCase();
 
             switch (command) {
+
                 case "load":
 
                     if (parts.length < 2) {
-                        System.out.println("Usage: load <filename>");
+                        sb = new StringBuilder();
+                        sb.append("Usage: load <filename>");
+                        System.out.println(sb);
                         break;
                     }
 
                     session = new Session(sessionId++);
 
                     ImageFile img = FileHandler.load(parts[1]);
-
                     session.addImage(img);
 
-                    System.out.println("Session with ID: " + session.getSessionId() + " started");
+                    sb = new StringBuilder();
+                    sb.append("Session with ID: ")
+                            .append(session.getSessionId())
+                            .append(" started");
+
+                    System.out.println(sb);
+
                     break;
 
                 case "grayscale":
-                    if(session == null) {
-                        System.out.println("No active session.");
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
                         break;
                     }
-                    session.addTransformation("grayscale");
-                    System.out.println("Transformation grayscale added.");
+
+                    session.addTransformation(new Grayscale());
+
+                    sb = new StringBuilder();
+                    sb.append("Transformation grayscale added.");
+                    System.out.println(sb);
+
                     break;
 
                 case "session":
-                    if(session == null) {
-                        System.out.println("No active session.");
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
                         break;
                     }
-                    if(parts.length > 1 && parts[1].equals("info")) {
+
+                    if (parts.length > 1 && parts[1].equals("info")) {
                         session.printSessionInfo();
                     }
-                    break;
 
-                case "add":
-                    if (session == null) {
-                        System.out.println("No active session. Use load first.");
-                        break;
-                    }
-                    if (parts.length < 2) {
-                        System.out.println("Usage: add <filename>");
-                        break;
-                    }
-                    ImageFile newImg = FileHandler.load(parts[1]);
-                    session.addImage(newImg);
-                    System.out.println("Image \"" + newImg.getFilename() + "\" added");
-                    break;
-
-                case "save":
-                    if (session == null) {
-                        System.out.println("No active session.");
-                        break;
-                    }
-                    for (ImageFile i : session.getImages()) {
-                        FileHandler.save(i);
-                    }
-                    break;
-
-                case "save as":
-                    if (session == null) {
-                        System.out.println("No active session.");
-                        break;
-                    }
-                    if (parts.length < 2) {
-                        System.out.println("Usage: saveas <filename>");
-                        break;
-                    }
-                    FileHandler.saveAs(session.getImages().get(0), parts[1]);
-                    break;
-
-                case "close":
-                    if (session == null) {
-                        System.out.println("No active session.");
-                        break;
-                    }
-                    System.out.println("Session " + session.getSessionId() + " closed");
-                    session = null;
                     break;
 
                 case "exit":
-                    System.out.println("Exiting...");
+
+                    sb = new StringBuilder();
+                    sb.append("Exiting...");
+                    System.out.println(sb);
+
                     sc.close();
                     return;
 
                 default:
-                    System.out.println("Unknown command. Supported: load, add, save, save as, close, exit");
+
+                    sb = new StringBuilder();
+                    sb.append("Unknown command.");
+                    System.out.println(sb);
             }
         }
     }
