@@ -4,6 +4,9 @@ import example.rastereditor.model.Session;
 import example.rastereditor.model.ImageFile;
 import example.rastereditor.file.FileHandler;
 import example.rastereditor.transformations.Grayscale;
+import example.rastereditor.transformations.Monochrome;
+import example.rastereditor.transformations.Negative;
+import example.rastereditor.transformations.Rotate;
 
 import java.util.Scanner;
 
@@ -65,6 +68,64 @@ public class MainApp {
 
                     sb = new StringBuilder();
                     sb.append("Transformation grayscale added.");
+                    System.out.println(sb);
+
+                    break;
+
+                case "negative":
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    session.addTransformation(new Negative());
+
+                    sb = new StringBuilder();
+                    sb.append("Transformation negative added.");
+                    System.out.println(sb);
+
+                    break;
+
+                case "monochrome":
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    session.addTransformation(new Monochrome());
+
+                    sb = new StringBuilder();
+                    sb.append("Transformation monochrome added.");
+                    System.out.println(sb);
+
+                    break;
+
+                case "rotate":
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    if (parts.length < 2) {
+                        sb = new StringBuilder();
+                        sb.append("Usage: rotate <left/right>");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    session.addTransformation(new Rotate(parts[1]));
+
+                    sb = new StringBuilder();
+                    sb.append("Transformation rotate ").append(parts[1]).append(" added.");
                     System.out.println(sb);
 
                     break;
