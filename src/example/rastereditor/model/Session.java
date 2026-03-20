@@ -53,4 +53,17 @@ public class Session {
 
         System.out.println(sb);
     }
+
+    public void undoLastTransformation() {
+        if (!transformations.isEmpty()) {
+            Transformation removed = transformations.remove(transformations.size() - 1);
+            StringBuilder sb = new StringBuilder();
+            sb.append("Removed last transformation: ").append(removed.getName());
+            System.out.println(sb);
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("No transformations to undo.");
+            System.out.println(sb);
+        }
+    }
 }

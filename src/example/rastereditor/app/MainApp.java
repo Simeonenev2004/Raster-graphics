@@ -8,6 +8,9 @@ import example.rastereditor.transformations.Monochrome;
 import example.rastereditor.transformations.Negative;
 import example.rastereditor.transformations.Rotate;
 
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MainApp {
@@ -15,12 +18,14 @@ public class MainApp {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+        Map<Integer, Session> sessions = new HashMap<>();
         Session session = null;
         int sessionId = 1;
 
         StringBuilder sb = new StringBuilder();
         sb.append("Welcome to Simple Raster Editor!");
         System.out.println(sb);
+
 
         while (true) {
 
@@ -37,6 +42,7 @@ public class MainApp {
                     if (parts.length < 2) {
                         sb = new StringBuilder();
                         sb.append("Usage: load <filename>");
+                        sessions.put(session.getSessionId(), session);
                         System.out.println(sb);
                         break;
                     }
@@ -128,6 +134,79 @@ public class MainApp {
                     sb.append("Transformation rotate ").append(parts[1]).append(" added.");
                     System.out.println(sb);
 
+                    break;
+
+                case "undo":
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+                    session.undoLastTransformation();
+
+                    break;
+
+                case "save":
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+                    for (ImageFile i : session.getImages()) {
+                        FileHandler.save(i);
+                    }
+                    sb = new StringBuilder();
+                    sb.append("All images saved with transformations applied.");
+                    System.out.println(sb);
+                    break;
+
+                case "save as":
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+                    if (parts.length < 2) {
+                        sb = new StringBuilder();
+                        sb.append("Usage: save as <filename>");
+                        System.out.println(sb);
+                        break;
+                    }
+                    FileHandler.saveAs(session.getImages().get(0), parts[1]);
+                    sb = new StringBuilder();
+                    sb.append("First image saved as ").append(parts[1]).append(" with transformations.");
+                    System.out.println(sb);
+                    break;
+
+                case "switch":
+                    if (parts.length < 2) {
+                        sb = new StringBuilder();
+                        sb.append("Usage: switch <sessionId>");
+                        System.out.println(sb);
+                        break;
+                    }
+                    int switchId;
+                    try {
+                        switchId = Integer.parseInt(parts[1]);
+                    } catch (NumberFormatException e) {
+                        sb = new StringBuilder();
+                        sb.append("Invalid session ID.");
+                        System.out.println(sb);
+                        break;
+                    }
+                    if (!sessions.containsKey(switchId)) {
+                        sb = new StringBuilder();
+                        sb.append("Session with ID ").append(switchId).append(" does not exist.");
+                        System.out.println(sb);
+                        break;
+                    }
+                    session = sessions.get(switchId);
+                    sb = new StringBuilder();
+                    sb.append("Switched to session with ID: ").append(switchId);
+                    System.out.println(sb);
                     break;
 
                 case "session":
