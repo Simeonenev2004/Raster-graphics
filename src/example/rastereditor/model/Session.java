@@ -66,4 +66,44 @@ public class Session {
             System.out.println(sb);
         }
     }
-}
+
+        public void createCollage(String direction, String img1Name, String img2Name, String outName) {
+
+            ImageFile img1 = null;
+            ImageFile img2 = null;
+
+            for (ImageFile img : images) {
+                if (img.getFilename().equals(img1Name)) {
+                    img1 = img;
+                }
+                if (img.getFilename().equals(img2Name)) {
+                    img2 = img;
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            if (img1 == null || img2 == null) {
+                sb.append("One or both images not found in session.");
+                System.out.println(sb);
+                return;
+            }
+
+            // проверка за формат (ppm, pgm, pbm)
+            String ext1 = img1Name.substring(img1Name.lastIndexOf('.'));
+            String ext2 = img2Name.substring(img2Name.lastIndexOf('.'));
+
+            if (!ext1.equals(ext2)) {
+                sb.append("Cannot make a collage from different types! (")
+                        .append(ext1).append(" and ").append(ext2).append(")");
+                System.out.println(sb);
+                return;
+            }
+
+            ImageFile newImage = new ImageFile(outName);
+            images.add(newImage);
+
+            sb.append("New collage \"").append(outName).append("\" created");
+            System.out.println(sb);
+        }
+    }

@@ -224,6 +224,31 @@ public class MainApp {
 
                     break;
 
+                case "collage":
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    if (parts.length < 5) {
+                        sb = new StringBuilder();
+                        sb.append("Usage: collage <direction> <img1> <img2> <out>");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    String direction = parts[1];
+                    String img1 = parts[2];
+                    String img2 = parts[3];
+                    String out = parts[4];
+
+                    session.createCollage(direction, img1, img2, out);
+
+                    break;
+
                 case "exit":
 
                     sb = new StringBuilder();
