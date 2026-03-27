@@ -56,7 +56,35 @@ public class MainApp {
                     sb.append("Session with ID: ")
                             .append(session.getSessionId())
                             .append(" started");
+                    System.out.println(sb);
 
+                    sb = new StringBuilder();
+                    sb.append("Image \"").append(img.getFilename()).append("\" added");
+                    System.out.println(sb);
+
+                    break;
+
+                case "add":
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session. Use load first.");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    if (parts.length < 2) {
+                        sb = new StringBuilder();
+                        sb.append("Usage: add <filename>");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    ImageFile newImg = FileHandler.load(parts[1]);
+                    session.addImage(newImg);
+
+                    sb = new StringBuilder();
+                    sb.append("Image \"").append(newImg.getFilename()).append("\" added");
                     System.out.println(sb);
 
                     break;
@@ -181,6 +209,23 @@ public class MainApp {
                     System.out.println(sb);
                     break;
 
+                case "close":
+
+                    if (session == null) {
+                        sb = new StringBuilder();
+                        sb.append("No active session.");
+                        System.out.println(sb);
+                        break;
+                    }
+
+                    sb = new StringBuilder();
+                    sb.append("Successfully closed session ").append(session.getSessionId());
+                    System.out.println(sb);
+
+                    session = null;
+
+                    break;
+
                 case "switch":
                     if (parts.length < 2) {
                         sb = new StringBuilder();
@@ -246,6 +291,30 @@ public class MainApp {
                     String out = parts[4];
 
                     session.createCollage(direction, img1, img2, out);
+
+                    break;
+
+                case "help":
+
+                    sb = new StringBuilder();
+
+                    sb.append("The following commands are supported:\n");
+                    sb.append("load <file>            opens <file>\n");
+                    sb.append("add <file>             adds image to current session\n");
+                    sb.append("grayscale              adds grayscale transformation\n");
+                    sb.append("monochrome             adds monochrome transformation\n");
+                    sb.append("negative               adds negative transformation\n");
+                    sb.append("rotate <left/right>    rotates images\n");
+                    sb.append("undo                   removes last transformation\n");
+                    sb.append("save                   saves all images\n");
+                    sb.append("save as <file>         saves first image in new file\n");
+                    sb.append("session info           shows session details\n");
+                    sb.append("switch <id>            switches session\n");
+                    sb.append("collage <dir> <img1> <img2> <out> creates collage\n");
+                    sb.append("close                  closes current session\n");
+                    sb.append("exit                   exits program");
+
+                    System.out.println(sb);
 
                     break;
 
