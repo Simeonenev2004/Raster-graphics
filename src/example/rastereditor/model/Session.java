@@ -23,6 +23,10 @@ public class Session {
         return images;
     }
 
+    public List<Transformation> getTransformations() {
+        return transformations;
+    }
+
     public void addImage(ImageFile img) {
         images.add(img);
     }
@@ -31,7 +35,7 @@ public class Session {
         transformations.add(t);
     }
 
-    public void printSessionInfo() {
+    public String getSessionInfo() {
 
         StringBuilder sb = new StringBuilder();
 
@@ -51,59 +55,50 @@ public class Session {
             }
         }
 
-        System.out.println(sb);
+        return sb.toString();
     }
 
-    public void undoLastTransformation() {
+    public String undoLastTransformation() {
         if (!transformations.isEmpty()) {
             Transformation removed = transformations.remove(transformations.size() - 1);
+
             StringBuilder sb = new StringBuilder();
             sb.append("Removed last transformation: ").append(removed.getName());
-            System.out.println(sb);
+
+            return sb.toString();
         } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("No transformations to undo.");
-            System.out.println(sb);
+            return "No transformations to undo.";
         }
     }
 
-        public void createCollage(String direction, String img1Name, String img2Name, String outName) {
+    public String createCollage(String direction, String img1Name, String img2Name, String outName) {
 
-            ImageFile img1 = null;
-            ImageFile img2 = null;
+        ImageFile img1 = null;
+        ImageFile img2 = null;
 
-            for (ImageFile img : images) {
-                if (img.getFilename().equals(img1Name)) {
-                    img1 = img;
-                }
-                if (img.getFilename().equals(img2Name)) {
-                    img2 = img;
-                }
+        for (ImageFile img : images) {
+            if (img.getFilename().equals(img1Name)) {
+                img1 = img;
             }
-
-            StringBuilder sb = new StringBuilder();
-
-            if (img1 == null || img2 == null) {
-                sb.append("One or both images not found in session.");
-                System.out.println(sb);
-                return;
+            if (img.getFilename().equals(img2Name)) {
+                img2 = img;
             }
-
-            // проверка за формат (ppm, pgm, pbm)
-            String ext1 = img1Name.substring(img1Name.lastIndexOf('.'));
-            String ext2 = img2Name.substring(img2Name.lastIndexOf('.'));
-
-            if (!ext1.equals(ext2)) {
-                sb.append("Cannot make a collage from different types! (")
-                        .append(ext1).append(" and ").append(ext2).append(")");
-                System.out.println(sb);
-                return;
-            }
-
-            ImageFile newImage = new ImageFile(outName);
-            images.add(newImage);
-
-            sb.append("New collage \"").append(outName).append("\" created");
-            System.out.println(sb);
         }
+
+        if (img1 == null || img2 == null) {
+            return "One or both images not found in session.";
+        }
+
+        String ext1 = img1Name.substring(img1Name.lastIndexOf('.'));
+        String ext2 = img2Name.substring(img2Name.lastIndexOf('.'));
+
+        if (!ext1.equals(ext2)) {
+            return "Cannot make a collage from different types! (" + ext1 + " and " + ext2 + ")";
+        }
+
+        ImageFile newImage = new ImageFile(outName);
+        images.add(newImage);
+
+        return "New collage \"" + outName + "\" created";
     }
+}
