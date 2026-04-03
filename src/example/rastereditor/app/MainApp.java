@@ -29,6 +29,9 @@ public class MainApp {
         commands.put("monochrome", new MonochromeCommand());
         commands.put("rotate", new RotateCommand());
         commands.put("undo", new UndoCommand());
+        commands.put("session", new SessionInfoCommand());
+        commands.put("save", new SaveCommand());
+        commands.put("save as", new SaveAsCommand());
 
         while (true) {
 
@@ -41,11 +44,19 @@ public class MainApp {
             }
 
             String[] parts = input.split(" ");
-            String commandName = parts[0].toLowerCase();
+
+            String commandName;
+
+            if (input.startsWith("save as")) {
+                commandName = "save as";
+            } else {
+                commandName = parts[0].toLowerCase();
+            }
 
             Command command = commands.get(commandName);
 
             if (command != null) {
+
                 CommandResult result = command.execute(parts, session);
 
                 if (result.getMessage() != null) {
@@ -57,7 +68,6 @@ public class MainApp {
             } else {
                 System.out.println("Unknown command");
             }
-
         }
     }
 }
