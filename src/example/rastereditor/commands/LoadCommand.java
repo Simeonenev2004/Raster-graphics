@@ -21,12 +21,10 @@ public class LoadCommand implements Command {
         newSession.addImage(img);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Session with ID: ")
-                .append(newSession.getSessionId())
-                .append(" started\n");
-
-        sb.append("Image \"").append(img.getFilename()).append("\" added");
+        sb.append("Successfully loaded ").append(args[1]).append("\n");
+        sb.append("Session with ID: ").append(newSession.getSessionId()).append(" started");
 
         return new CommandResult(sb.toString(), newSession);
+
     }
 }

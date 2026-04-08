@@ -13,7 +13,9 @@ public class MainApp {
 
         Scanner sc = new Scanner(System.in);
 
+        Map<Integer, Session> sessions = new HashMap<>();
         Session session = null;
+        int nextSessionId = 1;
 
         StringBuilder sb = new StringBuilder();
         sb.append("Welcome to Simple Raster Editor!");
@@ -23,7 +25,6 @@ public class MainApp {
         commands.put("load", new LoadCommand());
         commands.put("add", new AddCommand());
         commands.put("exit", new ExitCommand());
-
         commands.put("grayscale", new GrayscaleCommand());
         commands.put("negative", new NegativeCommand());
         commands.put("monochrome", new MonochromeCommand());
@@ -32,6 +33,10 @@ public class MainApp {
         commands.put("session", new SessionInfoCommand());
         commands.put("save", new SaveCommand());
         commands.put("save as", new SaveAsCommand());
+        commands.put("close", new CloseCommand());
+        commands.put("collage", new CollageCommand());
+        commands.put("switch", new SwitchCommand(sessions));
+        commands.put("help", new HelpCommand());
 
         while (true) {
 
@@ -63,7 +68,13 @@ public class MainApp {
                     System.out.println(result.getMessage());
                 }
 
-                session = result.getSession();
+                Session newSession = result.getSession();
+
+                if (newSession != session && newSession != null) {
+                    sessions.put(newSession.getSessionId(), newSession);
+                }
+
+                session = newSession;
 
             } else {
                 System.out.println("Unknown command");
