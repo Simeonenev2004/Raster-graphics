@@ -15,11 +15,8 @@ public class Application {
 
         Map<Integer, Session> sessions = new HashMap<>();
         Session session = null;
-        int nextId = 1;
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Welcome to Simple Raster Editor!");
-        System.out.println(sb);
+        System.out.println("Welcome to Simple Raster Editor!");
 
         Map<String, Command> commands = new HashMap<>();
         commands.put("load", new LoadCommand(sessions));
@@ -41,37 +38,43 @@ public class Application {
         while (true) {
 
             System.out.print("> ");
-
             String input = sc.nextLine().trim();
 
-            if (input.isEmpty()) continue;
-
-            String[] parts = input.split(" ");
+            if (input.isEmpty())
+                continue;
 
             String commandName;
-
             if (input.startsWith("save as")) {
                 commandName = "save as";
             } else if (input.startsWith("session info")) {
                 commandName = "session";
             } else {
-                commandName = parts[0].toLowerCase();
+                commandName = input.split(" ")[0].toLowerCase();
+            }
+
+            String[] parts;
+            if (commandName.equals("save as")) {
+                String filename = input.substring("save as".length()).trim();
+                filename = filename.replace("\"", "");
+                parts = new String[]{"save as", filename};
+            } else {
+                parts = input.split(" ");
             }
 
             Command command = commands.get(commandName);
 
             if (command != null) {
-
-                CommandResult result = command.execute(parts, session);
-
-                if (result.getMessage() != null) {
-                    System.out.println(result.getMessage());
+                try {
+                    CommandResult result = command.execute(parts, session);
+                    if (result.getMessage() != null) {
+                        System.out.println(result.getMessage());
+                    }
+                    session = result.getSession();
+                } catch (RuntimeException e) {
+                    System.out.println("Error: " + e.getMessage());
                 }
-
-                session = result.getSession();
-
             } else {
-                System.out.println("Unknown command");
+                System.out.println("Unknown command: " + commandName);
             }
         }
     }

@@ -1,7 +1,8 @@
 package rastereditor.commands;
 
-import rastereditor.model.Session;
 import rastereditor.model.ImageFile;
+import rastereditor.model.Session;
+import rastereditor.transformations.Transformation;
 import rastereditor.file.FileHandler;
 
 public class SaveAsCommand implements Command {
@@ -13,16 +14,21 @@ public class SaveAsCommand implements Command {
             return new CommandResult("No active session.", session);
         }
 
-        if (args.length < 3) {
+        if (args.length < 2) {
             return new CommandResult("Usage: save as <file>", session);
         }
 
         ImageFile firstImage = session.getImages().get(0);
+        String newFilename = args[1];
 
-        String filename = args[2];
+        ImageFile result = firstImage;
+        for (Transformation t : session.getTransformations()) {
+            result = t.apply(result);
+        }
 
-        FileHandler.saveAs(firstImage, filename);
+        result.setFilename(newFilename);
+        FileHandler.saveAs(result, newFilename);
 
-        return new CommandResult("Saved as " + filename, session);
+        return new CommandResult("Successfully saved " + newFilename, session);
     }
 }

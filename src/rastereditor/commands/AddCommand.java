@@ -20,9 +20,6 @@ public class AddCommand implements Command {
         ImageFile img = FileHandler.load(args[1]);
         session.addImage(img);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Image \"").append(img.getFilename()).append("\" added");
-
-        return new CommandResult(sb.toString(), session);
+        return new CommandResult("Image \"" + img.getShortName() + "\" added", session);
     }
 }

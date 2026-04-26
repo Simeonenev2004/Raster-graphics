@@ -1,7 +1,8 @@
 package rastereditor.commands;
 
-import rastereditor.model.Session;
 import rastereditor.model.ImageFile;
+import rastereditor.model.Session;
+import rastereditor.transformations.Transformation;
 import rastereditor.file.FileHandler;
 
 public class SaveCommand implements Command {
@@ -16,9 +17,18 @@ public class SaveCommand implements Command {
         StringBuilder sb = new StringBuilder();
 
         for (ImageFile img : session.getImages()) {
-            FileHandler.save(img);
-            sb.append("Saved ").append(img.getFilename()).append("\n");
+            ImageFile result = img;
+            for (Transformation t : session.getTransformations()) {
+                result = t.apply(result);
+            }
+
+            result.setFilename(img.getFilename());
+            FileHandler.save(result);
+
+            sb.append("Successfully saved ").append(img.getFilename()).append("\n");
         }
+
+        session.getTransformations().clear();
 
         return new CommandResult(sb.toString().trim(), session);
     }

@@ -31,7 +31,7 @@ public class LoadCommand implements Command {
         for (int i = 1; i < args.length; i++) {
             ImageFile img = FileHandler.load(args[i]);
             newSession.addImage(img);
-            sb.append("Image \"").append(args[i]).append("\" added\n");
+            sb.append("Image \"").append(img.getShortName()).append("\" added\n");
         }
 
         return new CommandResult(sb.toString().trim(), newSession);
