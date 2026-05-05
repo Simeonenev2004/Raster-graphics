@@ -4,8 +4,21 @@ import rastereditor.model.ImageFile;
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * Отговаря за четенето и записването на изображения от/на диска.
+ * Поддържа текстовите Netpbm формати: P1 (PBM), P2 (PGM) и P3 (PPM).
+ * При зареждане търси файла първо по дадения път, после в папката Images.
+ */
 public class FileHandler {
 
+    /**
+     * Зарежда изображение от диска и го връща като {@link ImageFile}.
+     * Търси файла първо по дадения път, после в папката Images.
+     *
+     * @param filename пътят или името на файла
+     * @return заредено изображение с пикселните данни
+     * @throws RuntimeException ако файлът не е намерен или форматът е невалиден
+     */
     public static ImageFile load(String filename) {
         File file = new File(filename);
         if (!file.exists()) {
@@ -38,14 +51,34 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Записва изображението обратно в оригиналния му файл.
+     *
+     * @param img изображението за записване
+     * @throws RuntimeException ако записването е неуспешно
+     */
     public static void save(ImageFile img) {
         writeToFile(img, img.getFilename());
     }
 
+    /**
+     * Записва изображението под ново зададено име.
+     *
+     * @param img         изображението за записване
+     * @param newFilename новото име на файла
+     * @throws RuntimeException ако записването е неуспешно
+     */
     public static void saveAs(ImageFile img, String newFilename) {
         writeToFile(img, newFilename);
     }
 
+    /**
+     * Записва изображението в даден път във валиден Netpbm формат.
+     *
+     * @param img  изображението за записване
+     * @param path пътят до файла
+     * @throws RuntimeException ако записването е неуспешно
+     */
     private static void writeToFile(ImageFile img, String path) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(path))) {
             pw.println(img.getMagicNumber());
@@ -67,6 +100,14 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Чете следващия токен от Scanner, като пропуска коментарни редове
+     * започващи с '#'.
+     *
+     * @param sc Scanner от който се чете
+     * @return следващият валиден токен
+     * @throws RuntimeException ако файлът свърши неочаквано
+     */
     private static String readNextToken(Scanner sc) {
         while (sc.hasNext()) {
             String token = sc.next();

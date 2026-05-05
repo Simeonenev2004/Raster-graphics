@@ -3,18 +3,34 @@ package rastereditor.commands;
 import rastereditor.model.Session;
 import rastereditor.model.ImageFile;
 import rastereditor.file.FileHandler;
-
 import java.util.Map;
 
+/**
+ * Команда за зареждане на един или повече файлове.
+ * Създава нова потребителска сесия и зарежда изображенията в нея.
+ * Ако се посочат няколко файла, всички се зареждат в същата сесия.
+ */
 public class LoadCommand implements Command {
 
     private Map<Integer, Session> sessions;
     private static int nextId = 1;
 
+    /**
+     * Създава нова LoadCommand с достъп до всички сесии.
+     *
+     * @param sessions картата с всички активни сесии
+     */
     public LoadCommand(Map<Integer, Session> sessions) {
         this.sessions = sessions;
     }
 
+    /**
+     * Изпълнява командата load — създава нова сесия и зарежда файловете.
+     *
+     * @param args    args[0] е "load", args[1..n] са имената на файловете
+     * @param session текущата сесия (не се използва, създава се нова)
+     * @return резултат с новата сесия и съобщение за успех
+     */
     @Override
     public CommandResult execute(String[] args, Session session) {
 

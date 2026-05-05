@@ -2,8 +2,18 @@ package rastereditor.commands;
 
 import rastereditor.model.Session;
 
+/**
+ * Команда която извежда информация за всички поддържани команди.
+ */
 public class HelpCommand implements Command {
 
+    /**
+     * Изпълнява командата help — показва списък с всички команди.
+     *
+     * @param args    args[0] е "help"
+     * @param session текущата активна сесия
+     * @return резултат с описание на всички команди
+     */
     @Override
     public CommandResult execute(String[] args, Session session) {
 

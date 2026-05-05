@@ -5,8 +5,21 @@ import rastereditor.model.Session;
 import rastereditor.transformations.Transformation;
 import rastereditor.file.FileHandler;
 
+/**
+ * Команда за записване на първото изображение от сесията под ново име.
+ * Прилага всички чакащи трансформации преди записването.
+ * За разлика от save, записва само първото изображение.
+ * След записването изчиства списъка с трансформации.
+ */
 public class SaveAsCommand implements Command {
 
+    /**
+     * Изпълнява командата save as — прилага трансформациите и записва под ново име.
+     *
+     * @param args    args[0] е "save as", args[1] е новото име на файла
+     * @param session текущата активна сесия
+     * @return резултат със съобщение за успех или грешка
+     */
     @Override
     public CommandResult execute(String[] args, Session session) {
 
@@ -26,8 +39,9 @@ public class SaveAsCommand implements Command {
             result = t.apply(result);
         }
 
-        result.setFilename(newFilename);
         FileHandler.saveAs(result, newFilename);
+
+        session.getTransformations().clear();
 
         return new CommandResult("Successfully saved " + newFilename, session);
     }

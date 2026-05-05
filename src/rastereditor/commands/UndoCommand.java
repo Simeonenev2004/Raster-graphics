@@ -2,8 +2,19 @@ package rastereditor.commands;
 
 import rastereditor.model.Session;
 
+/**
+ * Команда за отмяна на последно добавената трансформация в текущата сесия.
+ * Ако няма трансформации за отмяна, не прави нищо.
+ */
 public class UndoCommand implements Command {
 
+    /**
+     * Изпълнява командата undo — премахва последната трансформация от опашката.
+     *
+     * @param args    args[0] е "undo"
+     * @param session текущата активна сесия
+     * @return резултат със съобщение за резултата
+     */
     @Override
     public CommandResult execute(String[] args, Session session) {
 

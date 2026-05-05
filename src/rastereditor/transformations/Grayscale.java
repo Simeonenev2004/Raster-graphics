@@ -2,13 +2,30 @@ package rastereditor.transformations;
 
 import rastereditor.model.ImageFile;
 
+/**
+ * Трансформация която преобразува цветно PPM изображение в сиво PGM изображение.
+ * Използва стандартната формула за luminance: gray = 0.299*R + 0.587*G + 0.114*B.
+ * Ако изображението вече е PGM или PBM, то не се променя.
+ */
 public class Grayscale extends Transformation {
 
+    /**
+     * Връща името на трансформацията.
+     *
+     * @return "grayscale"
+     */
     @Override
     public String getName() {
         return "grayscale";
     }
 
+    /**
+     * Преобразува цветно PPM изображение в сиво PGM изображение.
+     * Ако изображението не е PPM, то се връща непроменено.
+     *
+     * @param img изображението за преобразуване
+     * @return ново PGM изображение или непроменено изображение ако не е PPM
+     */
     @Override
     public ImageFile apply(ImageFile img) {
         if (!img.getMagicNumber().equals("P3")) {
@@ -27,6 +44,7 @@ public class Grayscale extends Transformation {
                 int r = oldPixels[row][col][0];
                 int g = oldPixels[row][col][1];
                 int b = oldPixels[row][col][2];
+
                 int gray = (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
 
                 newPixels[row][col][0] = gray;
